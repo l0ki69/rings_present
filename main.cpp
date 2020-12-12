@@ -94,6 +94,28 @@ void idem(long long n)
 	cout << endl;
 }
 
+long long ord(long long a, long long n)
+{
+	long long b = 1;
+	long long k = 0;
+	bool q = true;
+	while (q)
+	{
+		k++;
+		b = b * a;
+		b = b % n;
+		if (b == 1)
+		{
+			//cout << a << " "  << k << endl;
+			return k;
+			q = false;
+			break;
+
+		}
+	}
+	return 1;
+}
+
 
 int main()
 {
@@ -109,7 +131,9 @@ int main()
 	while (q) {
 		cout << " 0 - выход " << "\n 1 - Все обратимые и делители нуля" << "\n 2 - Все идемпотенты"
 			<< "\n 3 - Найти обратный для элемента" << "\n 4 - Разбить кольцо на простые делители"  
-			<< "\n 5 - Разложение элемента на прямой изоморфизм" << "\n 6 - Обратный изоморфизм" << endl;
+			<< "\n 5 - Разложение элемента на прямой изоморфизм" << "\n 6 - Обратный изоморфизм" 
+			<< "\n 7 - вывести все обратимые элементы и их порядки" << "\n 8 - Максимальный порядок"
+			<< endl;
 		cin >> str;
 		st = atoi(str.c_str());
 		switch (st)
@@ -160,23 +184,27 @@ int main()
 		}
 		case 5:
 		{
-			nm.clear();
-			decomposition(n, nm);
-			vector <long long> buf;
-			long long a;
-			cout << "Введите число а = ";
-			cin >> a;
-			for (long long i = 0; i < nm.size(); i++)
+			for (long long i = 1; i < n; i++)
 			{
-				buf.push_back(a % nm.at(i));
+				nm.clear();
+				decomposition(n, nm);
+				vector <long long> buf;
+				long long a;
+				//cout << "Введите число а = ";
+				//cin >> a;
+				a = i;
+				for (long long i = 0; i < nm.size(); i++)
+				{
+					buf.push_back(a % nm.at(i));
+				}
+				cout << "остаток " << a << " соответствует парам: (";
+				for (long long i = 0; i < buf.size(); i++)
+				{
+					cout << buf.at(i);
+					if (i != buf.size() - 1) cout << ",";
+				}
+				cout << ")" << endl;
 			}
-			cout << "остаток " << a << " соответствует парам: (";
-			for (long long i = 0; i < buf.size(); i++)
-			{
-				cout << buf.at(i);
-				if (i != buf.size() - 1) cout << ",";
-			}
-			cout << ")" << endl;
 			system("pause>>NULL");
 			break;
 		}
@@ -212,6 +240,37 @@ int main()
 				}
 			}
 			cout << "Введенная пара соответствует элементу : " << ii << endl;
+			system("pause>>NULL");
+			break;
+		}
+		case 7:
+		{
+			for (long long i = 1; i < n; i++)
+			{
+				if (gcd(i, n) == 1)
+				{
+					cout << "элемент - " << i << "   порядок - "<< ord(i,n) << endl;
+				}
+			}
+
+			system("pause>>NULL");
+			break;
+		}
+		case 8:
+		{
+			long long max = 1;
+			long long temp_ord = 1;
+			cout << "подождите это займет время" << endl;
+			for (long long i = 1; i < n; i++)
+			{
+				if (gcd(i, n) == 1)
+				{
+					temp_ord = ord(i, n);
+					if (temp_ord > max)
+						max = temp_ord;
+				}
+			}
+			cout << "Максимальный порядок = " << max << endl;
 			system("pause>>NULL");
 			break;
 		}
